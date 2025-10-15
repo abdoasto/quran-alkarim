@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أوقات الصلاة 12 ساعة</title>
+<style>
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #FFFD8F;
+  color: #fff;
+  text-align: center;
+  padding: 30px;
+}
+
+
+select, button {
+  font-size: 18px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+}
+button {
+  background: #043915;
+  color: #ffffff;
+  cursor: pointer;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+#times {
+  margin-top: 20px;
+  background: #4C763B;
+  padding: 20px;
+  border-radius: 10px;
+  width: fit-content;
+  margin: 20px auto;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.time-box {
+  margin: 8px 0;
+  font-size: 20px;
+}
+</style>
+</head>
+<body>
+<h1 style="margin-top: 0%; padding: 3px; border-radius: 10px; background-color: #043915;">🕌 أوقات الصلاة</h1>
+<div style="background-color: #4C763B; border-radius: 10px; 
+box-shadow: #000 0px 0px 5px; ">
+<select id="city">
+  <option value="Tripoli">طرابلس</option>
+  <option value="Benghazi">بنغازي</option>
+  <option value="Misrata">مصراتة</option>
+  <option value="Sabha">سبها</option>
+  <option value="Derna">درنة</option>
+</select>
+
+<button onclick="getPrayerTimes()">عرض الأوقات</button>
+
+<div id="times">جاري التحميل...</div>
+
+</div>
+<div>
+  <button type="button" onclick="window.location.href='text12.htm'">رجوع لصفحة الرئسية</button>
+</div>
+<script>
+const cityCoordinates = {
+  "Tripoli": { lat: 32.8872, lon: 13.1913 },
+  "Benghazi": { lat: 32.1167, lon: 20.0667 },
+  "Misrata": { lat: 32.3770, lon: 15.0910 },
+  "Sabha": { lat: 27.0386, lon: 14.4339 },
+  "Derna": { lat: 32.7642, lon: 22.6396 }
+};
+
+// تحويل الوقت من 24 ساعة إلى 12 ساعة
+function to12Hour(timeStr) {
+  let [hour, minute] = timeStr.split(":");
+  hour = parseInt(hour);
+  const suffix = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minute} ${suffix}`;
+}
+
+async function getPrayerTimes() {
+  const city = document.getElementById("city").value;
+  const coords = cityCoordinates[city];
+  const url = `https://api.aladhan.com/v1/timings?latitude=${coords.lat}&longitude=${coords.lon}&method=5`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const t = data.data.timings;
+
+    document.getElementById("times").innerHTML = `
+      <h2>📍 ${city}</h2>
+      <div class="time-box">الفجر: ${to12Hour(t.Fajr)}</div>
+      <div class="time-box">الشروق: ${to12Hour(t.Sunrise)}</div>
+      <div class="time-box">الظهر: ${to12Hour(t.Dhuhr)}</div>
+      <div class="time-box">العصر: ${to12Hour(t.Asr)}</div>
+      <div class="time-box">المغرب: ${to12Hour(t.Maghrib)}</div>
+      <div class="time-box">العشاء: ${to12Hour(t.Isha)}</div>
+    `;
+
+    localStorage.setItem("selectedCity", city);
+  } catch (error) {
+    document.getElementById("times").innerHTML = "❌ حدث خطأ أثناء جلب البيانات.";
+  }
+}
+
+// التحديث التلقائي بعد منتصف الليل
+function setupAutoRefresh() {
+  const now = new Date();
+  const tomorrow = new Date();
+  tomorrow.setHours(24,0,5,0);
+  const msUntilMidnight = tomorrow - now;
+
+  setTimeout(() => {
+    getPrayerTimes();
+    setupAutoRefresh();
+  }, msUntilMidnight);
+}
+
+window.onload = function() {
+  const savedCity = localStorage.getItem("selectedCity");
+  if (savedCity) document.getElementById("city").value = savedCity;
+  getPrayerTimes();
+  setupAutoRefresh();
+};
+</script>
+</body>
+</html>

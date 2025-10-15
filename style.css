@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@200..1000&family=Rakkas&display=swap');
+
+
+body{
+    background-color: #FFFD8F ;
+}
+/* صفحات القران الكريم */
+h3{
+    background-color: #043915;
+    border-radius: 10px;
+    text-align: center;
+    color: #043915;
+    font-size: 20px;
+    margin: 0px 20px 0px 20px;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+}
+.page{
+   background-color: #043915;
+   border-radius: 10px;
+   box-shadow: 0 0 10px rgba(5, 5, 5, 0.5);
+   margin: 20px ;
+    padding: 20px ;
+   line-height: 1.6;
+   text-align: center;
+   color: white;
+}
+.sura-end{
+    background-color: #043915;
+    border-radius: 10px;
+    text-align: center;
+    color: #043915;
+    font-size: 20px;
+    margin: 0px 120px 20px 120px;
+    padding: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+}
+/* صفحه الرئسية لصفحات القران */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.sura-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background-color: #043915;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.sura-link:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.sura-link span {
+  text-align: center;
+  margin-top: 5px;
+}
+.text-align{
+    background-image: linear-gradient( 90deg, #043915, #2f8045);
+    border-radius: 0px 0px 5px 5px;
+    color: #ffffff;
+    margin-top: -8px;
+    padding: 5px;
+    text-align: center
+}
+/* صفحة الحج و العمره */
+.video-box{
+  text-align: center;
+}
